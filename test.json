@@ -1,0 +1,97 @@
+{
+  "appAnnotations": {
+    "oam.dev/kubevela-version": "UNKNOWN"
+  },
+  "appLabels": {},
+  "appName": "my-app",
+  "appRevision": "my-app-v1",
+  "appRevisionNum": 1,
+  "cluster": "local",
+  "clusterVersion": {
+    "gitVersion": "v1.30.4+k3s1",
+    "major": "1",
+    "minor": 30,
+    "platform": "linux/arm64"
+  },
+  "componentType": "webservice",
+  "components": [
+    {
+      "name": "my-comp",
+      "type": "webservice",
+      "properties": {
+        "image": "my/im",
+        "volumeMounts": {
+          "emptyDir": [
+            {
+              "mountPath": "/tmp/myEmpty",
+              "name": "myempty"
+            }
+          ]
+        }
+      },
+      "traits": [
+        {
+          "type": "my-trait"
+        }
+      ]
+    }
+  ],
+  "name": "my-comp",
+  "namespace": "default",
+  "output": {
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "spec": {
+      "selector": {
+        "matchLabels": {
+          "app.oam.dev/component": "my-comp"
+        }
+      },
+      "template": {
+        "metadata": {
+          "labels": {
+            "app.oam.dev/component": "my-comp",
+            "app.oam.dev/name": "my-app"
+          }
+        },
+        "spec": {
+          "containers": [
+            {
+              "image": "my/im",
+              "name": "my-comp",
+              "volumeMounts": [
+                {
+                  "mountPath": "/tmp/myEmpty",
+                  "name": "myempty"
+                }
+              ]
+            }
+          ],
+          "volumes": [
+            {
+              "emptyDir": {
+                "medium": ""
+              },
+              "name": "myempty"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "parameter": {
+    "image": "my/im",
+    "volumeMounts": {
+      "emptyDir": [
+        {
+          "mountPath": "/tmp/myEmpty",
+          "name": "myempty"
+        }
+      ]
+    }
+  },
+  "publishVersion": "",
+  "replicaKey": "",
+  "revision": "fb56b75ecdcd21aa",
+  "workflowName": ""
+}

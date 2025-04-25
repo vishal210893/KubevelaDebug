@@ -1,0 +1,46 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+    name: kubevelaefshappypathonlycheckingsta-wdrg
+    namespace: default
+spec:
+    components:
+      - name: express-server
+        type: configmap-component
+        properties:
+          secondkey:
+            value1: "1"
+    workflow:
+        steps:
+            - name: read-network-properties
+              type: read-object
+              outputs:
+                - valueFrom: output.value.data["non_k8s_private_subnet_groups"]
+                  name: subnet-ids
+                - valueFrom: output.value.data["vpc_id"]
+                  name: vpc-id
+                - valueFrom: output.value.data["aws_region"]
+                  name: region
+                - valueFrom: output.value.data["vpc_private_subnet_cidrs"]
+                  name: subnet-cidrs
+              properties:
+                apiVersion: v1
+                kind: ConfigMap
+                name: atmos-cluster-info
+                namespace: default
+            - name: apply
+              type: apply-component
+              properties:
+                component: express-server
+              dependsOn:
+                - read-network-properties
+              inputs:
+                - parameterKey: firstkey
+                  from: subnet-ids
+                - parameterKey: secondkey.value2.value3.value4
+                  from: subnet-cidrs
+                - parameterKey: thirdkey
+                  from: region
+
+
+

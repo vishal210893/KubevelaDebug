@@ -1,0 +1,185 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "2"
+    meta.helm.sh/release-name: vela-core
+    meta.helm.sh/release-namespace: vela-system
+  creationTimestamp: "2025-04-15T05:06:45Z"
+  generation: 2
+  labels:
+    app.kubernetes.io/instance: vela-core
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vela-core
+    app.kubernetes.io/version: 1.10.2
+    controller.oam.dev/name: vela-core
+    gwcp.guidewire.com/app-name: kubevela-core
+    gwcp.guidewire.com/created-by: pod-danville
+    gwcp.guidewire.com/dept: "275"
+    gwcp.guidewire.com/maintained-by: pod-danville
+    gwcp.guidewire.com/tenant-name: danville
+    gwcp.guidewire.com/version: 1.10.2
+    helm.sh/chart: vela-core-1.10.2
+  name: vela-core
+  namespace: vela-system
+  resourceVersion: "26947"
+  uid: 88e436e3-9df7-49ec-a3df-6fb2ecb2218f
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 3
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: vela-core
+      app.kubernetes.io/name: vela-core
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: "2025-04-15T05:10:39Z"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "8080"
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: vela-core
+        app.kubernetes.io/name: vela-core
+        gwcp.guidewire.com/app-name: kubevela-core
+        gwcp.guidewire.com/created-by: pod-danville
+        gwcp.guidewire.com/dept: "275"
+        gwcp.guidewire.com/maintained-by: pod-danville
+        gwcp.guidewire.com/tenant-name: danville
+        gwcp.guidewire.com/version: 1.10.2
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: vela-core
+                  app.kubernetes.io/name: vela-core
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+      containers:
+      - args:
+        - --metrics-addr=:8080
+        - --enable-leader-election
+        - --use-webhook=true
+        - --webhook-port=9443
+        - --webhook-cert-dir=/etc/k8s-webhook-certs
+        - --optimize-mark-with-prob=0.1
+        - --optimize-disable-component-revision
+        - --health-addr=:9440
+        - --system-definition-namespace=vela-system
+        - --application-revision-limit=2
+        - --definition-revision-limit=2
+        - --application-re-sync-period=5m
+        - --concurrent-reconciles=4
+        - --kube-api-qps=400
+        - --kube-api-burst=600
+        - --max-workflow-wait-backoff-time=60
+        - --max-workflow-failed-backoff-time=300
+        - --max-workflow-step-error-retry-times=10
+        - --enable-external-package-for-default-compiler=true
+        - --enable-external-package-watch-for-default-compiler=false
+        - --feature-gates=EnableSuspendOnFailure=false
+        - --feature-gates=AuthenticateApplication=false
+        - --feature-gates=GzipResourceTracker=false
+        - --feature-gates=ZstdResourceTracker=true
+        - --feature-gates=ApplyOnce=false
+        - --feature-gates=MultiStageComponentApply=true
+        - --feature-gates=GzipApplicationRevision=false
+        - --feature-gates=ZstdApplicationRevision=true
+        - --feature-gates=PreDispatchDryRun=true
+        - --feature-gates=DisableBootstrapClusterInfo=false
+        - --feature-gates=InformerCacheFilterUnnecessaryFields=true
+        - --feature-gates=SharedDefinitionStorageForApplicationRevision=true
+        - --feature-gates=DisableWorkflowContextConfigMapCache=true
+        - --feature-gates=EnableCueValidation=true
+        image: 776719623202.dkr.ecr.us-west-2.amazonaws.com/docker-public/oamdev/vela-core:v1.10.2
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: healthz
+            scheme: HTTP
+          initialDelaySeconds: 90
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: vela-core
+        ports:
+        - containerPort: 9443
+          name: webhook-server
+          protocol: TCP
+        - containerPort: 9440
+          name: healthz
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /readyz
+            port: healthz
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1Gi
+          requests:
+            cpu: 50m
+            memory: 20Mi
+        securityContext: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/k8s-webhook-certs
+          name: tls-cert-vol
+          readOnly: true
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: kubevela-vela-core
+      serviceAccountName: kubevela-vela-core
+      terminationGracePeriodSeconds: 30
+      topologySpreadConstraints:
+      - labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: vela-core
+        maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: ScheduleAnyway
+      volumes:
+      - name: tls-cert-vol
+        secret:
+          defaultMode: 420
+          secretName: vela-core-admission
+status:
+  availableReplicas: 3
+  conditions:
+  - lastTransitionTime: "2025-04-15T05:07:21Z"
+    lastUpdateTime: "2025-04-15T05:07:21Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2025-04-15T05:06:45Z"
+    lastUpdateTime: "2025-04-15T05:12:20Z"
+    message: ReplicaSet "vela-core-7c857bb77c" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 2
+  readyReplicas: 3
+  replicas: 3
+  updatedReplicas: 3

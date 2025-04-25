@@ -1,0 +1,134 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  annotations:
+    addon.oam.dev/traitDefinitions: keda-auto-scaler
+    app.oam.dev/publishVersion: addon-20250326112252927
+    oam.dev/kubevela-version: v1.10.2
+  creationTimestamp: "2025-03-26T05:52:52Z"
+  finalizers:
+  - app.oam.dev/resource-tracker-finalizer
+  generation: 1
+  labels:
+    addons.oam.dev/name: keda
+    addons.oam.dev/registry: KubeVela
+    addons.oam.dev/version: 2.8.3
+  name: addon-keda
+  namespace: vela-system
+  resourceVersion: "4726"
+  uid: 81938a96-9ef1-49c7-9473-8a816480a888
+spec:
+  components:
+  - name: kedacore
+    properties:
+      chart: keda
+      repoType: helm
+      upgradeCRD: false
+      url: https://kedacore.github.io/charts
+      version: 2.8.2
+    type: helm
+  policies:
+  - name: deploy-topology
+    properties:
+      clusterLabelSelector: {}
+      namespace: kube-system
+    type: topology
+  workflow:
+    steps:
+    - name: deploy-keda
+      properties:
+        policies:
+        - deploy-topology
+      type: deploy
+status:
+  appliedResources:
+  - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+    cluster: local
+    creator: workflow
+    kind: HelmRelease
+    name: kedacore
+    namespace: kube-system
+  - apiVersion: source.toolkit.fluxcd.io/v1beta2
+    cluster: local
+    creator: workflow
+    kind: HelmRepository
+    name: kedacore
+    namespace: kube-system
+  - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+    cluster: k3d-slave2
+    creator: workflow
+    kind: HelmRelease
+    name: kedacore
+    namespace: kube-system
+  - apiVersion: source.toolkit.fluxcd.io/v1beta2
+    cluster: k3d-slave2
+    creator: workflow
+    kind: HelmRepository
+    name: kedacore
+    namespace: kube-system
+  conditions:
+  - lastTransitionTime: "2025-03-26T05:52:52Z"
+    reason: Available
+    status: "True"
+    type: Parsed
+  - lastTransitionTime: "2025-03-26T05:52:52Z"
+    reason: Available
+    status: "True"
+    type: Revision
+  - lastTransitionTime: "2025-03-26T05:52:52Z"
+    reason: Available
+    status: "True"
+    type: Policy
+  - lastTransitionTime: "2025-03-26T05:52:52Z"
+    reason: Available
+    status: "True"
+    type: Render
+  latestRevision:
+    name: addon-keda-v1
+    revision: 1
+    revisionHash: fd3d9c8e94966b55
+  observedGeneration: 1
+  services:
+  - cluster: local
+    healthy: false
+    message: 'Fetch repository successfully, Delivery helm release in progress, message:
+      Reconciliation in progress'
+    name: kedacore
+    namespace: kube-system
+    workloadDefinition:
+      apiVersion: ""
+      kind: ""
+  - cluster: k3d-slave2
+    healthy: false
+    message: 'Fetch repository successfully, Delivery helm release in progress, message:
+      Reconciliation in progress'
+    name: kedacore
+    namespace: kube-system
+    workloadDefinition:
+      apiVersion: ""
+      kind: ""
+  status: runningWorkflow
+  workflow:
+    appRevision: addon-20250326112252927
+    contextBackend:
+      apiVersion: v1
+      kind: ConfigMap
+      name: workflow-addon-keda-context
+      namespace: vela-system
+      uid: 06d769b6-7440-4495-b15b-24ddfbf882c8
+    finished: false
+    mode: StepByStep-DAG
+    startTime: "2025-03-26T05:52:52Z"
+    status: executing
+    steps:
+    - firstExecuteTime: "2025-03-26T05:52:52Z"
+      id: pw4pglomnh
+      lastExecuteTime: "2025-03-26T05:57:35Z"
+      message: local/kube-system//kedacore is not healthy,k3d-slave2/kube-system//kedacore
+        is not healthy
+      name: deploy-keda
+      phase: running
+      reason: Wait
+      type: deploy
+    suspend: false
+    terminated: false

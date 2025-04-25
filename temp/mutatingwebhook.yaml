@@ -1,0 +1,64 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  annotations:
+    meta.helm.sh/release-name: kubevela
+    meta.helm.sh/release-namespace: vela-system
+  creationTimestamp: "2025-02-26T15:01:29Z"
+  generation: 2
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  name: kubevela-vela-core-admission
+  resourceVersion: "984"
+  uid: 2bed9c1b-efd2-4a9e-a2ff-db1ebca099f5
+webhooks:
+- admissionReviewVersions:
+  - v1beta1
+  - v1
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURDekNDQWZPZ0F3SUJBZ0lVQzB5a0pTTXZ2NmYzNklYR0tJZEU3Y2hMR1o0d0RRWUpLb1pJaHZjTkFRRUwKQlFBd0ZURVRNQkVHQTFVRUF3d0tWMlZpYUc5dmF5QkRRVEFlRncweU5UQXlNall4TnpFeE1EQmFGdzB6TlRBeQpNalF4TnpFeE1EQmFNQlV4RXpBUkJnTlZCQU1NQ2xkbFltaHZiMnNnUTBFd2dnRWlNQTBHQ1NxR1NJYjNEUUVCCkFRVUFBNElCRHdBd2dnRUtBb0lCQVFEZEFpY21md0xLa1IzdHVOSlZBdjBCYTF0MGlGeERLemZhNEZCeGx4VG8KZUtRQi9NcWFZOG1yNGxiUlU1YmRLNm1ydzF0RmhjVjF5R211Mm1lQVkrenZ6SUVSWXdjZWhuYWVIVDVMT3JpZgptYVJmVjVWUXd1Z0hsZ1RNWDkrWWZ0VzA0dFB5TjF4b1N1T0YwYlpKbTh0dThyK2UxNXdGYjJkNjk2MU1UeldmCk1rNFY2Wk05c3p5dmZEcWFneFp1NlVRSFF0N2JGaElJZDJjUU1VaTJIUnFiNDRxdlpwV1hmTkJuYUd0d0lYSisKRWx6SUhGVzJQcXB1VDc4Nk93QStwVlYyck9ra3pxdnZpTC8ySzQ3OEE4aDBTeVNXUjkyL0lkTUFQZllpNVpoSgpwTFFGdEM5bHVpU1FmRVIyM1ltSm0wSGFzeWlIbndQS0xDcis2ZDJMYVg0OUFnTUJBQUdqVXpCUk1CMEdBMVVkCkRnUVdCQlE3NUJHWjJ6dGNXWTN1WjZRVDkwNEh1RE5YanpBZkJnTlZIU01FR0RBV2dCUTc1QkdaMnp0Y1dZM3UKWjZRVDkwNEh1RE5YanpBUEJnTlZIUk1CQWY4RUJUQURBUUgvTUEwR0NTcUdTSWIzRFFFQkN3VUFBNElCQVFBMwpFQW9HN010UTZLVHJ2U0J2eTF4YWZCSXNQVWIzMDBzdXdhTmFWTFZMY1RoUjJJdXhVYU1seDVPOGt0M2tPZFJrCjYrMzJNWEJTSTFwWWd5ZkNBZGU0eEhMZnNrVGZlb29PQmJYajhkUzdGNUFvYlhJUHFNSnNhdU5ObGFCVDJuVFkKMjc5QjhUb1c2Tmg1Tk5XVHFuWHloZzhlcUJHU3ZSVlJ6UExkOGt2VjVraFU4K25LbGZLYWlhL0M3TWFGOXFaYwpMbUNDZ3NTTnBTaHVrZmVqNVY3SWNUcXphTlRNSVVaZncyV2ZwUk1GVlNxaDR0NWZQTHZZZ0NMb3JLNkJxc3VmCmdhTXhpQVg2KzFaVDNkS1hWb1lEQ0E3SWNOL3hKcHRtZmlkckdiMEVuYWVXbGxEUnk3MlNUc2Zxa1F2bTNCNEYKekU0eWZNMm1ibGZBeThXd1VZaVEKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+    url: "https://192.168.29.210:9445/mutating-core-oam-dev-v1beta1-applications"
+  failurePolicy: Fail
+  matchPolicy: Equivalent
+  name: mutating.core.oam.dev.v1beta1.applications
+  namespaceSelector: {}
+  objectSelector: {}
+  reinvocationPolicy: Never
+  rules:
+  - apiGroups:
+    - core.oam.dev
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - applications
+    scope: '*'
+  sideEffects: None
+  timeoutSeconds: 10
+- admissionReviewVersions:
+  - v1beta1
+  - v1
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURDekNDQWZPZ0F3SUJBZ0lVQzB5a0pTTXZ2NmYzNklYR0tJZEU3Y2hMR1o0d0RRWUpLb1pJaHZjTkFRRUwKQlFBd0ZURVRNQkVHQTFVRUF3d0tWMlZpYUc5dmF5QkRRVEFlRncweU5UQXlNall4TnpFeE1EQmFGdzB6TlRBeQpNalF4TnpFeE1EQmFNQlV4RXpBUkJnTlZCQU1NQ2xkbFltaHZiMnNnUTBFd2dnRWlNQTBHQ1NxR1NJYjNEUUVCCkFRVUFBNElCRHdBd2dnRUtBb0lCQVFEZEFpY21md0xLa1IzdHVOSlZBdjBCYTF0MGlGeERLemZhNEZCeGx4VG8KZUtRQi9NcWFZOG1yNGxiUlU1YmRLNm1ydzF0RmhjVjF5R211Mm1lQVkrenZ6SUVSWXdjZWhuYWVIVDVMT3JpZgptYVJmVjVWUXd1Z0hsZ1RNWDkrWWZ0VzA0dFB5TjF4b1N1T0YwYlpKbTh0dThyK2UxNXdGYjJkNjk2MU1UeldmCk1rNFY2Wk05c3p5dmZEcWFneFp1NlVRSFF0N2JGaElJZDJjUU1VaTJIUnFiNDRxdlpwV1hmTkJuYUd0d0lYSisKRWx6SUhGVzJQcXB1VDc4Nk93QStwVlYyck9ra3pxdnZpTC8ySzQ3OEE4aDBTeVNXUjkyL0lkTUFQZllpNVpoSgpwTFFGdEM5bHVpU1FmRVIyM1ltSm0wSGFzeWlIbndQS0xDcis2ZDJMYVg0OUFnTUJBQUdqVXpCUk1CMEdBMVVkCkRnUVdCQlE3NUJHWjJ6dGNXWTN1WjZRVDkwNEh1RE5YanpBZkJnTlZIU01FR0RBV2dCUTc1QkdaMnp0Y1dZM3UKWjZRVDkwNEh1RE5YanpBUEJnTlZIUk1CQWY4RUJUQURBUUgvTUEwR0NTcUdTSWIzRFFFQkN3VUFBNElCQVFBMwpFQW9HN010UTZLVHJ2U0J2eTF4YWZCSXNQVWIzMDBzdXdhTmFWTFZMY1RoUjJJdXhVYU1seDVPOGt0M2tPZFJrCjYrMzJNWEJTSTFwWWd5ZkNBZGU0eEhMZnNrVGZlb29PQmJYajhkUzdGNUFvYlhJUHFNSnNhdU5ObGFCVDJuVFkKMjc5QjhUb1c2Tmg1Tk5XVHFuWHloZzhlcUJHU3ZSVlJ6UExkOGt2VjVraFU4K25LbGZLYWlhL0M3TWFGOXFaYwpMbUNDZ3NTTnBTaHVrZmVqNVY3SWNUcXphTlRNSVVaZncyV2ZwUk1GVlNxaDR0NWZQTHZZZ0NMb3JLNkJxc3VmCmdhTXhpQVg2KzFaVDNkS1hWb1lEQ0E3SWNOL3hKcHRtZmlkckdiMEVuYWVXbGxEUnk3MlNUc2Zxa1F2bTNCNEYKekU0eWZNMm1ibGZBeThXd1VZaVEKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+    url: "https://192.168.29.210:9445/mutating-core-oam-dev-v1beta1-componentdefinitions"
+  failurePolicy: Fail
+  matchPolicy: Equivalent
+  name: mutating.core.oam-dev.v1beta1.componentdefinitions
+  namespaceSelector: {}
+  objectSelector: {}
+  reinvocationPolicy: Never
+  rules:
+  - apiGroups:
+    - core.oam.dev
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - componentdefinitions
+    scope: '*'
+  sideEffects: None
+  timeoutSeconds: 10

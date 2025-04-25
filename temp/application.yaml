@@ -1,0 +1,11 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: configmap-workflow-app
+spec:
+  components:
+    - name: defrevlimitcheck2
+      type: configmap-component
+      properties:
+        firstkey: "1"
+        secondkey: "2"

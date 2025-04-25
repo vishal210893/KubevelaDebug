@@ -1,0 +1,16 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: sample-webapp
+spec:
+  components:
+    - name: my-web
+      type: webservice
+      properties:
+        image: "nginx:latest"
+      traits:
+        - type: autoscaler
+          properties:
+            minReplicas: 2
+            maxReplicas: 10
+            cpuPercent: 80
