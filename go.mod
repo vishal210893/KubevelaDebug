@@ -1,6 +1,7 @@
 module github.com/oam-dev/kubevela
 
 go 1.22.0
+toolchain go1.24.1
 
 require (
 	cuelang.org/go v0.9.2
@@ -37,6 +38,7 @@ require (
 	github.com/hashicorp/hcl/v2 v2.18.0
 	github.com/hinshun/vt10x v0.0.0-20180616224451-1954e6464174
 	github.com/imdario/mergo v0.3.16
+	github.com/jeremywohl/flatten/v2 v2.0.0-20211013061545-07e4a09fb8e4
 	github.com/kubevela/pkg v1.9.3-0.20241203070234-2cf98778c0a9
 	github.com/kubevela/workflow v0.6.1-0.20250226022524-23468c911a01
 	github.com/kyokomi/emoji v2.2.4+incompatible
@@ -70,7 +72,7 @@ require (
 	golang.org/x/crypto v0.32.0
 	golang.org/x/mod v0.19.0
 	golang.org/x/oauth2 v0.20.0
-	golang.org/x/sync v0.10.0
+	golang.org/x/sync v0.13.0
 	golang.org/x/term v0.28.0
 	golang.org/x/text v0.21.0
 	golang.org/x/tools v0.23.0
@@ -199,7 +201,6 @@ require (
 	github.com/invopop/yaml v0.1.0 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
 	github.com/jellydator/ttlcache/v3 v3.0.1 // indirect
-	github.com/jeremywohl/flatten/v2 v2.0.0-20211013061545-07e4a09fb8e4 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/jmoiron/sqlx v1.3.5 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
