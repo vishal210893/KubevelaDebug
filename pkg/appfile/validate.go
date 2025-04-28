@@ -17,15 +17,17 @@ limitations under the License.
 package appfile
 
 import (
-	"cuelang.org/go/cue"
 	"encoding/json"
 	"fmt"
+	"strings"
+
+	"cuelang.org/go/cue"
 	"github.com/jeremywohl/flatten/v2"
 	"github.com/kubevela/pkg/cue/cuex"
 	"github.com/kubevela/workflow/pkg/cue/model/value"
-	"github.com/oam-dev/kubevela/pkg/features"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
-	"strings"
+
+	"github.com/oam-dev/kubevela/pkg/features"
 
 	"github.com/pkg/errors"
 
@@ -44,18 +46,20 @@ func (p *Parser) ValidateCUESchematicAppfile(a *Appfile) error {
 		if wl.CapabilityCategory != types.CUECategory || wl.Type == v1alpha1.RefObjectsComponentType {
 			continue
 		}
-		ctxData := GenerateContextDataFromAppFile(a, wl.Name)
-		pCtx, err := newValidationProcessContext(wl, ctxData)
 
+		ctxData := GenerateContextDataFromAppFile(a, wl.Name)
 		if utilfeature.DefaultMutableFeatureGate.Enabled(features.EnableCueValidation) {
-			err2 := p.ValidateComponentParams(ctxData, wl, a)
-			if err2 != nil {
-				return err2
+			err := p.ValidateComponentParams(ctxData, wl, a)
+			if err != nil {
+				return err
 			}
 		}
+
+		pCtx, err := newValidationProcessContext(wl, ctxData)
 		if err != nil {
 			return errors.WithMessagef(err, "cannot create the validation process context of app=%s in namespace=%s", a.Name, a.Namespace)
 		}
+
 		for _, tr := range wl.Traits {
 			if tr.CapabilityCategory != types.CUECategory {
 				continue
@@ -79,8 +83,6 @@ func (p *Parser) ValidateCUESchematicAppfile(a *Appfile) error {
 //     block or as workflow‑step inputs.
 //  4. Run cue.Value.Validate to enforce user‑supplied values against
 //     template constraints.
-//
-// A nil return means the component passes all checks.
 func (p *Parser) ValidateComponentParams(ctxData velaprocess.ContextData, wl *Component, app *Appfile) error {
 	// ---------------------------------------------------------------------
 	// 1. Build synthetic CUE source
@@ -128,7 +130,7 @@ func (p *Parser) ValidateComponentParams(ctxData velaprocess.ContextData, wl *Co
 // cueParamBlock marshals the Params map into a `parameter:` block suitable
 // for inclusion in a CUE document.
 func cueParamBlock(params map[string]any) (string, error) {
-	if params == nil || len(params) == 0 {
+	if len(params) == 0 {
 		return velaprocess.ParameterFieldName + ": {}", nil
 	}
 	b, err := json.Marshal(params)
@@ -143,37 +145,43 @@ func cueParamBlock(params map[string]any) (string, error) {
 // indirectly (workflow‑step inputs). It returns an error describing any
 // missing keys.
 func enforceRequiredParams(root cue.Value, params map[string]any, app *Appfile) error {
-	required, err := requiredFields(root.LookupPath(value.FieldPath(velaprocess.ParameterFieldName)))
-	if err != nil {
-		return err
-	}
-	required, err = filterMissing(required, params)
+	requiredParams, err := requiredFields(root.LookupPath(value.FieldPath(velaprocess.ParameterFieldName)))
 	if err != nil {
 		return err
 	}
 
-	// Collect parameter keys already surfaced by workflow inputs
-	seen := make(map[string]struct{})
-	for _, step := range app.WorkflowSteps {
-		for _, in := range step.Inputs {
-			seen[in.ParameterKey] = struct{}{}
-		}
+	// filter out params that are initialized directly
+	requiredParams, err = filterMissing(requiredParams, params)
+	if err != nil {
+		return err
 	}
 
-	var missing []string
-	for _, key := range required {
-		if _, ok := seen[key]; !ok {
-			missing = append(missing, key)
+	// if there are still required params not initialized
+	if len(requiredParams) > 0 {
+		// collect params that are initialized in workflow steps
+		wfInitParams := make(map[string]bool)
+		for _, step := range app.WorkflowSteps {
+			for _, in := range step.Inputs {
+				wfInitParams[in.ParameterKey] = true
+			}
 		}
-	}
 
-	if len(missing) > 0 {
-		return fmt.Errorf("missing parameters: %v", strings.Join(missing, ","))
+		// collect required params that were not initialized even in workflow steps
+		var missingParams []string
+		for _, key := range requiredParams {
+			if !wfInitParams[key] {
+				missingParams = append(missingParams, key)
+			}
+		}
+
+		if len(missingParams) > 0 {
+			return fmt.Errorf("missing parameters: %v", strings.Join(missingParams, ","))
+		}
 	}
 	return nil
 }
 
-// RequiredLeaves returns the list of "parameter" fields that must be supplied
+// requiredFields returns the list of "parameter" fields that must be supplied
 // by the caller.  Nested struct leaves are returned as dot-separated paths.
 //
 // Rules:

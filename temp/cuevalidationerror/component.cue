@@ -22,6 +22,7 @@ template: {
     	value2: {
     		value3:{
     			value4: *"default-value-2" | string
+    			value5: string
     		}
     	}
     }
@@ -38,7 +39,7 @@ template: {
 		}
 		data: {
 			one:   parameter.firstkey
-			two:   parameter.thirdkey
+			two:   parameter.secondkey.value2.value3.value5
 			three: parameter.secondkey.value1
 			four:  parameter.secondkey.value2.value3.value4
 		}

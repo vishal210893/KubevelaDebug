@@ -9,7 +9,9 @@ spec:
         type: configmap-component
         properties:
           secondkey:
-            value1: "1"
+            value2:
+              value3:
+                value4: "1"
     workflow:
         steps:
             - name: read-network-properties
@@ -37,10 +39,11 @@ spec:
               inputs:
                 - parameterKey: firstkey
                   from: subnet-ids
-                - parameterKey: secondkey.value2.value3.value4
+                - parameterKey: secondkey.value1
                   from: subnet-cidrs
                 - parameterKey: thirdkey
                   from: region
+
 
 
 

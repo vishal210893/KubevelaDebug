@@ -19,14 +19,16 @@ package utils
 import (
 	"context"
 	"fmt"
-	"github.com/oam-dev/kubevela/pkg/oam"
-	"k8s.io/klog/v2"
 	"os"
 	"regexp"
-	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 	"sort"
 	"strconv"
 	"strings"
+
+	"k8s.io/klog/v2"
+	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
+
+	"github.com/oam-dev/kubevela/pkg/oam"
 
 	"cuelang.org/go/cue/cuecontext"
 	cueErrors "cuelang.org/go/cue/errors"
