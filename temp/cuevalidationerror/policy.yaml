@@ -1,0 +1,31 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: kubevelaefshappypathonlycheckingsta-wdrg
+  namespace: default
+spec:
+  components:
+    - name: express-server
+      type: configmap-component
+      properties:
+        secondkey:
+          value2:
+            value3:
+              value4: "1"
+  policies:
+    - name: override-nginx-legacy-image
+      type: override
+      properties:
+        components:
+          - name: express-server
+            properties:
+              firstkey: nginx:1.20
+              secondkey:
+                value1: "abc"
+                value2:
+                  value3:
+                    value5: "1"
+              thirdkey: "123"
+
+
+
