@@ -1,11 +1,11 @@
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-    name: kubevelaefshappypathonlycheckingsta-wdrg
+  name: dynamic-configmap-example
     namespace: default
 spec:
     components:
-      - name: express-server
+      - name: express-cm
         type: configmap-component
         properties:
           secondkey:
@@ -17,14 +17,14 @@ spec:
             - name: read-network-properties
               type: read-object
               outputs:
-                - valueFrom: output.value.data["non_k8s_private_subnet_groups"]
-                  name: subnet-ids
-                - valueFrom: output.value.data["vpc_id"]
-                  name: vpc-id
-                - valueFrom: output.value.data["aws_region"]
-                  name: region
-                - valueFrom: output.value.data["vpc_private_subnet_cidrs"]
-                  name: subnet-cidrs
+                - valueFrom: output.value.data["firstkey"]
+                  name: output1
+                - valueFrom: output.value.data["secondkey"]
+                  name: output2
+                - valueFrom: output.value.data["thirdkey"]
+                  name: output3
+                - valueFrom: output.value.data["forthkey"]
+                  name: output4
               properties:
                 apiVersion: v1
                 kind: ConfigMap
@@ -33,16 +33,16 @@ spec:
             - name: apply
               type: apply-component
               properties:
-                component: express-server
+                component: express-cm
               dependsOn:
                 - read-network-properties
               inputs:
                 - parameterKey: firstkey
-                  from: subnet-ids
+                  from: output1
                 - parameterKey: secondkey.value1
-                  from: subnet-cidrs
+                  from: output2
                 - parameterKey: thirdkey
-                  from: region
+                  from: output3
 
 
 
