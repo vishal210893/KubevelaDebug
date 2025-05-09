@@ -2,7 +2,7 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: dynamic-configmap-example
-    namespace: default
+  namespace: default
 spec:
     components:
       - name: express-cm
@@ -43,7 +43,3 @@ spec:
                   from: output2
                 - parameterKey: thirdkey
                   from: output3
-
-
-
-

@@ -1,0 +1,31 @@
+apiVersion: core.oam.dev/v1alpha1
+kind: WorkflowRun
+metadata:
+  name: build-push-image
+spec:
+  workflowSpec:
+    steps:
+      - name: check-app-exist
+        type: read-app
+        properties:
+          name: webservice-app
+      - name: read-object
+        type: read-object
+        properties:
+          apiVersion: v1
+          kind: ConfigMap
+          name: sample-configmap
+          namespace: default
+      - name: build-push
+        type: build-push-image-s3-ecr
+        properties:
+          verbosity: error
+          fnContext:
+            name: test
+            tenant: "gokarna"
+            awsAccountId: 12345
+            clusterName: "k3d-kubevela"
+            kanikoPodName: "sample-kaniko-pod-name"
+          credentials:
+            aws:
+              region: "us-west-2"
