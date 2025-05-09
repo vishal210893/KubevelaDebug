@@ -1,0 +1,23 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: first-vela-app
+spec:
+  components:
+    - name: express-server-1
+      type: webservice
+      properties:
+        image: oamdev/hello-world
+        port: 8000
+      traits:
+        - type: gateway
+          properties:
+            class: traefik
+            domain: 47.251.8.82.nip.io
+            http:
+              "/": 8000
+  policies:
+    - name: keep-legacy-resource
+      type: garbage-collect
+      properties:
+        keepLegacyResource: true

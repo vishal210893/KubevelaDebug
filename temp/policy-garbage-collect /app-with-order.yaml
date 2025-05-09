@@ -1,0 +1,38 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: gc-dependency
+  namespace: default
+spec:
+  components:
+    - name: test1
+      type: webservice
+      properties:
+        image: crccheck/hello-world
+        port: 8000
+      dependsOn:
+        - "test2"
+    - name: test2
+      type: webservice
+      properties:
+        image: vishal210893/dockerpoc-1:20250430-020419
+        port: 8000
+      inputs:
+        - from: test3-output
+          parameterKey: test
+      dependsOn:
+        - "test3"
+    - name: test3
+      type: webservice
+      properties:
+        image: crccheck/hello-world
+        port: 8000
+      outputs:
+        - name: test3-output
+          valueFrom: output.metadata.name
+
+  policies:
+    - name: gc-dependency
+      type: garbage-collect
+      properties:
+        order: dependency
