@@ -54,3 +54,4 @@ git-page/
 vela.json
 
 dist/
+k8s-webhook-server/

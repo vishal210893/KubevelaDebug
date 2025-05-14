@@ -1,36 +1,36 @@
-apiVersion: "core.oam.dev/v1beta1"
-kind: "ComponentDefinition"
-metadata: {
-    name: "configmap-component"
-}
-spec: {
-    version: "11.1.4"
-    workload: {
-        definition: {
-            apiVersion: "v1"
-            kind: "ConfigMap"
-        }
-    }
-    schematic: {
-        cue: {
-            template: """
-            parameter: {
-                firstkey: string
-                secondkey: string
-            }
-            output: {
-                apiVersion: "v1"
-                kind:       "ConfigMap"
-                metadata: {
-                    name: context.name
-                }
-                data: {
-                    firstkey: parameter.firstkey
-                    secondkey: parameter.secondkey
-                    data: "29"
-                }
-            }
-            """
-        }
-    }
+// A simple ConfigMap component with four required keys
+// Run:  vela def apply configmap-component.cue
+// Then: use `type: configmap-component` in any Application
+"configmap-component": {
+	alias:        "cm"
+  description:  "Creates a ConfigMap with four string values"
+  type:         "component"
+
+  attributes: {
+  	version: "11.1.6"
+  	workload: definition:{
+        apiVersion: "v1"
+        kind: "ConfigMap"
+      }
+     }
+  }
+
+template: {
+	parameter: {
+		firstkey:  string
+		secondkey:  string
+  }
+
+	output: {
+		apiVersion: "v1"
+		kind:       "ConfigMap"
+		metadata: {
+			name: context.name
+		}
+		data: {
+			firstkey: parameter.firstkey
+			secondkey: parameter.secondkey
+			data: "36"
+		}
+	}
 }

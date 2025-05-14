@@ -8,14 +8,14 @@ spec:
     - name: test1
       type: webservice
       properties:
-        image: crccheck/hello-world
+        image: vishal210893/dockerpoc-1:20250430-020419
         port: 8000
       dependsOn:
         - "test2"
     - name: test2
       type: webservice
       properties:
-        image: vishal210893/dockerpoc-1:20250430-020419
+        image: crccheck/hello-world
         port: 8000
       inputs:
         - from: test3-output

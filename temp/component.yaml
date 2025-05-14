@@ -4,7 +4,7 @@ kind: ComponentDefinition
 metadata:
   name: configmap-component
 spec:
-  # This tells KubeVela that the workload produced will be a ConfigMap
+  version: 11.1.4
   workload:
     definition:
       apiVersion: v1
@@ -25,6 +25,6 @@ spec:
           data: {
             firstkey: parameter.firstkey
             secondkey: parameter.secondkey
-            data: "11"
+            data: "29"
           }
         }
