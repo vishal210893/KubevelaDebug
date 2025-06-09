@@ -20,7 +20,7 @@ jobs:
           docker build --build-arg GOPROXY=https://proxy.golang.org -t docker.io/oamdev/vela-core:${{ github.sha }} .
 
       - name: Run Trivy vulnerability scanner for vela core
-        uses: aquasecurity/trivy-action@d9cd5b1c23aaf8cb31bb09141028215828364bbb # master
+        uses: aquasecurity/trivy-action@76071ef0d7ec797419534a183b498b4d6366cf37 # master
         with:
           image-ref: 'docker.io/oamdev/vela-core:${{ github.sha }}'
           format: 'sarif'
